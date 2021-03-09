@@ -46,5 +46,5 @@ Substance(substance='Zn', name='Zinc, Zinc powder (pyrophoric), Zn, Element 30, 
 <h2>License</h2>
 <p>The library is under the MIT license.</p>
 <p>
-    Read the <a href="https://github.com/mishailovic/chemica/blob/master/LICENSE">LICENSE</a> for more information.
+    Read the <a href="https://github.com/mishailovic/chemica/blob/main/LICENSE">LICENSE</a> for more information.
 </p>

@@ -31,7 +31,7 @@ setup(
     python_requires=">=3.7.0",
     url="https://github.com/mishailovic/chemica/",
     project_urls={
-        "Documentation": "https://github.com/mishailovic/chemica/blob/master/README.md",
+        "Documentation": "https://github.com/mishailovic/chemica/blob/main/README.md",
         "Issues": "https://github.com/mishailovic/chemica/issues",
     },
     packages=find_packages(),
