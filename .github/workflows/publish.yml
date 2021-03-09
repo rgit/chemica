@@ -1,4 +1,4 @@
-name: Upload a new version of a Chemica package 
+name: Upload a new version of a Chemica package.
 
 on:
   push:
