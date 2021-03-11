@@ -9,7 +9,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 @dataclass
 class Equation:
     """The object represents a chemical reaction."""
-    substances: tuple
+    substances: List
     result: str
 
 
@@ -29,29 +29,30 @@ class _Request(urllib3.HTTPConnectionPool):
 
 class Chemica:
     @staticmethod
-    def solve(substance_1: str, substance_2: str) -> Union[List[Equation], Equation]:
+    def solve(*args, language_code: str = "en") -> Union[List[Equation], Equation]:
         """
         The method gets chemical substances and finds solutions for them.
-        :param substance_1: The first chemical substance.
-        :param substance_2: The second chemical substance.
+        :param args: The chemical substances.
+        :param language_code: Language code. By default, is EN.
         :return: List of the equations or one equation.
         """
-        response = _Request.make("GET", f"https://chemequations.com/ru/?s={substance_1}+%2B+{substance_2}")
+        substances = [substance for substance in args]
+        response = _Request.make("GET", f"https://chemequations.com/{language_code}/?s={'+%2B+'.join(substances)}")
         soup = BeautifulSoup(response.data, "html.parser")
         multiple_solutions = soup.find("table", {"class": "table possible-solutions center"})
         if multiple_solutions:
             equations = []
             for url in [url.get("href") for url in multiple_solutions.find("tbody").find_all("a")]:
-                response = _Request.make("GET", f"https://chemequations.com/ru/{url}")
+                response = _Request.make("GET", f"https://chemequations.com/{language_code}/{url}")
                 soup = BeautifulSoup(response.data, "html.parser")
                 equation = "".join([char.text.strip("\n").replace("\xa0", "").rstrip(" ") for char in
                                    soup.find_all("h1", {"class": "equation main-equation well"})])
-                equations.append(Equation(substances=(substance_1, substance_2), result=equation))
+                equations.append(Equation(substances=substances, result=equation))
             return equations
         else:
             equation = "".join([char.text.strip("\n").replace("\xa0", "").rstrip(" ") for char in
                                 soup.find_all("h1", {"class": "equation main-equation well"})])
-            return Equation(substances=(substance_1, substance_2), result=equation)
+            return Equation(substances=substances, result=equation)
 
     @staticmethod
     def info(substance: str, language_code: str = "en") -> Substance:
